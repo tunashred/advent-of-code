@@ -5,16 +5,14 @@
 #include <algorithm>
 #include <sstream>
 #include <set>
-#include <cstdint>
 
 int main() {
     std::ifstream myfile("../input.txt");
     int aux;
     std::vector<int> winnerNums;
     std::vector<int> myNums;
-    uint64_t sum = 0;
+    int sum = 0;
     std::string line;
-
 
     while(getline(myfile, line)) {
         size_t pipePos = line.find('|');
@@ -49,11 +47,6 @@ int main() {
         // moving them back into my vector to finish my job
         myWinnerNums.assign(unique_myWinnerNums.begin(), unique_myWinnerNums.end());
 
-        for(auto x : myWinnerNums) {
-            std::cout << x << " ";
-        }
-        std::cout << "\n";
-
         float gamePoints = 0.5;
         st = myWinnerNums.begin();
         while(st != myWinnerNums.end()) {
@@ -62,7 +55,6 @@ int main() {
         }
 
         sum += gamePoints;
-        std::cout << sum << "\n";
 
         winnerNums.clear();
         myNums.clear();
