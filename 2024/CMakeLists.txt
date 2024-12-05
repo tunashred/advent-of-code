@@ -48,4 +48,5 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_options(${DEBUG_FLAGS})
 endif()
 
+add_subdirectory(utils)
 add_subdirectory(day_1)
