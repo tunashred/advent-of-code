@@ -1,65 +1,72 @@
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 #include "utils.hpp"
+
+bool is_safe(std::vector<int>& level) {
+    int current = level[0], next = level[1];
+    bool is_valid = true;
+    bool increasing_order = true;
+    bool bad_level = false;
+
+    if (abs(current - next) > 3 || current == next) {
+        return false;
+    }
+    if (current > next) {
+        increasing_order = false;
+    }
+    current = next;
+
+    for (int i = 2; i < level.size(); i++) {
+        next = level[i];
+
+        if (abs(current - next) > 3 || current == next) {
+            is_valid = false;
+            return false;
+        }
+        if ((current < next && !increasing_order) || (current > next && increasing_order)) {
+            is_valid = false;
+            return false;
+        }
+        current = next;
+    }
+    return true;
+}
 
 int main() {
     std::stringstream stream{read_file("../../day_2/in.input")};
     std::string line;
     int result = 0;
+    std::vector<int> level;
+    std::vector<int> maybe_fixed_level;
 
     while (std::getline(stream, line)) {
         std::stringstream line_stream(line);
-        int current, next;
-        bool is_valid = true;
-        bool increasing_order = true;
-        bool bad_level = false;
+        int num;
 
-        line_stream >> current >> next;
-        if (abs(current - next) > 3 || current == next) {
-            bad_level = true;
+        while (line_stream >> num) {
+            level.push_back(num);
         }
-        if (bad_level) {
-            current = next;
-            line_stream >> next;
-            if (abs(current - next) > 3 || current == next) {
-                continue;
-            }
-        }
-        if (current > next) {
-            increasing_order = false;
-        }
-        current = next;
-        
-        while (line_stream >> next) {
-            bool bad_next = false;
-            if ((abs(current - next) > 3 || current == next)) {
-                if (!bad_level) {
-                    bad_level = true;
-                    bad_next = true;
-                } else {
-                    is_valid = false;
+
+        if (!is_safe(level)) {
+            for (int i = 0; i < level.size(); i++) {
+                maybe_fixed_level.clear();
+                for (int j = 0; j < level.size(); j++) {
+                    if (j != i) {
+                        maybe_fixed_level.push_back(level[j]);
+                    }
+                }
+                if (is_safe(maybe_fixed_level)) {
+                    result++;
                     break;
                 }
             }
-            if ((current < next && !increasing_order) || (current > next && increasing_order)) {
-                if (!bad_level) {
-                    bad_level = true;
-                    bad_next = true;
-                } else {
-                    is_valid = false;
-                    break;
-                }
-            }
-            if (!bad_next) {
-                current = next;
-            }
-        }
-
-        if (is_valid) {
-            std::cout << line_stream.str() << "\n";
+        } else {
             result++;
         }
+
+        level.clear();
     }
 
     std::cout << result << '\n';
