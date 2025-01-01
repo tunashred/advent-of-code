@@ -8,7 +8,6 @@ bool is_safe(std::vector<int>& level) {
     int current = level[0], next = level[1];
     bool is_valid = true;
     bool increasing_order = true;
-    bool bad_level = false;
 
     if (abs(current - next) > 3 || current == next) {
         return false;
@@ -22,11 +21,9 @@ bool is_safe(std::vector<int>& level) {
         next = level[i];
 
         if (abs(current - next) > 3 || current == next) {
-            is_valid = false;
             return false;
         }
         if ((current < next && !increasing_order) || (current > next && increasing_order)) {
-            is_valid = false;
             return false;
         }
         current = next;
@@ -61,6 +58,7 @@ int main() {
                     result++;
                     break;
                 }
+
             }
         } else {
             result++;
