@@ -6,6 +6,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Project name and version
 project(advent_of_code_2024 VERSION 0.1.0 LANGUAGES C CXX)
@@ -48,6 +49,15 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_options(${DEBUG_FLAGS})
 endif()
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lc++")
+else()
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lstdc++")
+endif()
+
+
 add_subdirectory(utils)
 add_subdirectory(day_1)
 add_subdirectory(day_2)
+add_subdirectory(day_3)
